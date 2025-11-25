@@ -1,0 +1,18 @@
+arquivo = open("livros_indicacao.txt", "r")
+linhas = arquivo.readlines()
+arquivo.close()
+
+livros = []
+
+for linha in linhas:
+    partes = linha.strip().split(",")
+    ano = partes[0]
+    nome = partes[1]
+    nota = float(partes[2])
+    livros.append((nome, nota))
+
+livros.sort(key=lambda x: x[2], reverse=True)
+
+print("MELHORES LIVROS")
+for livros in livros:
+    print(f"{livro[0]} ({livro[1]}) - Nota: {livro[2]}")
