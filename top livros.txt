@@ -1,0 +1,20 @@
+arquivo = open("filmes_indicacao.txt", "r", encoding='utf-8')
+linhas = arquivo.readlines()
+arquivo.close()
+
+itens = []
+
+for linha in linhas:
+    try:
+        partes = linha.strip().split(",")
+        nome = partes[1]
+        nota = float(partes[2])
+        itens.append((nome, nota))
+    except (IndexError, ValueError):
+        print(f"Aviso: Ignorando linha com formato inválido ou nota ausente: {linha.strip()}")
+
+itens.sort(key=lambda x: x[1], reverse=True)
+
+print("MELHORES LIVROS/FILMES")
+for item in itens:
+    print(f"'{item[0]}' - Nota: {item[1]}")
