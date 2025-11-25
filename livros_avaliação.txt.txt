@@ -1,0 +1,14 @@
+livros = []
+with open("livros.txt", "r") as arquivo:
+    for linha in arquivo:
+        nome = linha.strip().split(",")
+        while True:
+            try:
+                nota = float(input(f'Dê uma nota de 0 a 10 para "{nome}": '))
+                if 0 <= nota <= 10:
+                    break
+                else:
+                    print("Nota inválida! Digite entre 0 e 10.")
+            except ValueError:
+                print("Digite um número válido.")
+        livros.append(f"{nome},{nota}\n")
