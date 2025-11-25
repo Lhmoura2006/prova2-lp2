@@ -1,18 +1,25 @@
-arquivo = open("livros_indicacao.txt", "r")
-linhas = arquivo.readlines()
-arquivo.close()
-
 livros = []
 
-for linha in linhas:
-    partes = linha.strip().split(",")
-    ano = partes[0]
-    nome = partes[1]
-    nota = float(partes[2])
-    livros.append((nome, nota))
+try:
+    with open('livros_avaliacao.txt', 'r', encoding='utf-8') as arquivo:
+        for linha in arquivo:
+            try:
+                nome, nota_str = linha.strip().split(',')
+                livros.append((nome.strip(), float(nota_str.strip())))
+            except ValueError:
+                print(f"Erro ao processar a linha: {linha.strip()}. Formato inválido.")
+except FileNotFoundError:
+    print("Arquivo 'livros_avaliacao.txt' não encontrado.")
 
-livros.sort(key=lambda x: x[2], reverse=True)
+if livros:
+    livros.sort(key=lambda x: (-x[1], x[0]))
 
-print("MELHORES LIVROS")
-for livros in livros:
-    print(f"{livro[0]} ({livro[1]}) - Nota: {livro[2]}")
+    top5 = livros[:5]
+
+    with open('livros_indicacao.txt', 'w', encoding='utf-8') as arquivo_indicacao:
+        for livro in top5:
+            arquivo_indicacao.write(f"{livro[0]},{livro[1]}\n")
+
+    print("Arquivo 'livros_indicacao.txt' criado com sucesso!")
+else:
+    print("Nenhum livro válido foi encontrado para processamento.")
