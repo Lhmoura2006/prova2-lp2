@@ -1,14 +1,35 @@
+arquivo = open('filmes_indicacao.txt', 'r', encoding='utf-8')
+linhas = arquivo.readlines()
+arquivo.close()
+
 livros = []
-with open("livros.txt", "r") as arquivo:
-    for linha in arquivo:
-        nome = linha.strip().split(",")
-        while True:
-            try:
-                nota = float(input(f'Dê uma nota de 0 a 10 para "{nome}": '))
-                if 0 <= nota <= 10:
-                    break
-                else:
-                    print("Nota inválida! Digite entre 0 e 10.")
-            except ValueError:
-                print("Digite um número válido.")
-        livros.append(f"{nome},{nota}\n")
+for linha in linhas:
+    partes = linha.strip().split(',')
+    
+    if len(partes) >= 3:
+        ano = partes[0]
+        nome = partes[1]
+        try:
+            nota = float(partes[2])
+        except ValueError:
+            nota = 0.0
+        livros.append({'nome': nome, 'nota': nota, 'status': ''})
+livros.sort(key=lambda x: x['nota'], reverse=True)
+
+print("MELHORES LIVROS (Ordenados por Nota)")
+for livro in livros:
+    print(f"'{livro['nome']}' - Nota: {livro['nota']}")
+
+print("\n--- REGISTRO DE STATUS DE LEITURA ---")
+for livro in livros:
+    while True:
+        status = input(f"Qual o status de leitura de '{livro['nome']}'? (lido/lendo/não lido): ").strip().lower()
+        if status in ['lido', 'lendo', 'não lido']:
+            livro['status'] = status
+            break
+        else:
+            print("Status inválido. Por favor, digite 'lido', 'lendo' ou 'não lido'.")
+
+print("\n--- LISTA FINAL DE LIVROS COM STATUS ---")
+for livro in livros:
+    print(f"'{livro['nome']}' - Nota: {livro['nota']} - Status: {livro['status'].capitalize()}")
